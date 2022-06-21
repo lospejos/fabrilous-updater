@@ -1,18 +1,17 @@
 package com.hughbone.fabrilousupdater.command;
 
-import com.hughbone.fabrilousupdater.command.suggestion.*;
+import com.hughbone.fabrilousupdater.command.suggestion.IgnoreList;
+import com.hughbone.fabrilousupdater.command.suggestion.ModList;
 import com.hughbone.fabrilousupdater.util.FabUtil;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Style;
-import net.minecraft.util.Formatting;
+import net.minecraft.text.Text;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,17 +33,23 @@ public class IgnoreCommand {
     }
 
     private void registerClient() {
-        ClientCommandManager.DISPATCHER.register(LiteralArgumentBuilder.<FabricClientCommandSource>literal("fabdate")
-                .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("ignore")
-                        .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("add").then(RequiredArgumentBuilder.<FabricClientCommandSource, String>argument("mod", StringArgumentType.word()).suggests(ModList::getSuggestions).executes(ctx -> execute(1, StringArgumentType.getString(ctx, "mod"), ClientPlayerHack.getPlayer(ctx)))))
-                        .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("remove").then(RequiredArgumentBuilder.<FabricClientCommandSource, String>argument("mod", StringArgumentType.word()).suggests(IgnoreList::getSuggestions).executes(ctx -> execute(2, StringArgumentType.getString(ctx, "mod"), ClientPlayerHack.getPlayer(ctx)))))
-                        .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("list").executes((ctx) -> execute(3, null, ClientPlayerHack.getPlayer(ctx))))
-                )
-        );
+
+
+
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+            dispatcher.register(LiteralArgumentBuilder.<FabricClientCommandSource>literal("fabdate")
+                    .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("ignore")
+                            .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("add").then(RequiredArgumentBuilder.<FabricClientCommandSource, String>argument("mod", StringArgumentType.word()).suggests(ModList::getSuggestions).executes(ctx -> execute(1, StringArgumentType.getString(ctx, "mod"), ClientPlayerHack.getPlayer(ctx)))))
+                            .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("remove").then(RequiredArgumentBuilder.<FabricClientCommandSource, String>argument("mod", StringArgumentType.word()).suggests(IgnoreList::getSuggestions).executes(ctx -> execute(2, StringArgumentType.getString(ctx, "mod"), ClientPlayerHack.getPlayer(ctx)))))
+                            .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("list").executes((ctx) -> execute(3, null, ClientPlayerHack.getPlayer(ctx))))
+                    )
+            );
+        });
     }
 
+
     private void registerServer() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, isDedicated) -> dispatcher.register(CommandManager.literal("fabdateserver").requires(source -> source.hasPermissionLevel(4))
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(CommandManager.literal("fabdateserver").requires(source -> source.hasPermissionLevel(4))
                 .then(CommandManager.literal("ignore")
                         .then(CommandManager.literal("add").then(CommandManager.argument("mod", StringArgumentType.word()).suggests(ModList::getSuggestions).executes((ctx) -> execute(1, StringArgumentType.getString(ctx, "mod"), ctx.getSource().getPlayer()))))
                         .then(CommandManager.literal("remove").then((CommandManager.argument("mod", StringArgumentType.word()).suggests(IgnoreList::getSuggestions).executes((ctx) -> execute(2, StringArgumentType.getString(ctx, "mod"), ctx.getSource().getPlayer())))))
@@ -95,7 +100,7 @@ public class IgnoreCommand {
     private int execute(int option, String modInput, PlayerEntity player) {  // Option: (1=add, 2=remove, 3=list)
         // get just the mod from input
         if (option == 3) {
-            player.sendMessage(new LiteralText("[Fabrilous Updater] Ignore List:").setStyle(Style.EMPTY.withColor(Formatting.GRAY)), false);
+            player.sendMessage(Text.of("[Fabrilous Updater] Ignore List:"), false);
         }
 
         FabUtil.createConfigFiles(); // Make sure ignore config file exists
@@ -111,7 +116,7 @@ public class IgnoreCommand {
             while ((line = file.readLine()) != null) {
                 if (option == 1) {
                     if (line.equals(modInput)) {
-                        player.sendMessage(new LiteralText("[Error] " + modInput + " is already in ignore list.").setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
+                        player.sendMessage(Text.of("[Error] " + modInput + " is already in ignore list."), false);
                         file.close();
                         return 0;
                     } else {
@@ -124,7 +129,7 @@ public class IgnoreCommand {
                         isRemoved = true;
                     }
                 } else if (option == 3) {
-                    player.sendMessage(new LiteralText(line), false);
+                    player.sendMessage(Text.of(line), false);
                 }
             }
             file.close();
@@ -133,7 +138,7 @@ public class IgnoreCommand {
         }
 
         if (option == 3) {
-            player.sendMessage(new LiteralText(""), false);
+            player.sendMessage(Text.of(""), false);
             return 1;
         } else {
             try {
@@ -146,12 +151,12 @@ public class IgnoreCommand {
         }
         // Success messages
         if (option == 1) {
-            player.sendMessage(new LiteralText("Added " + modInput + " to ignore list."), false);
+            player.sendMessage(Text.of("Added " + modInput + " to ignore list."), false);
         } else if (option == 2) {
             if (isRemoved) {
-                player.sendMessage(new LiteralText("Removed " + modInput + " from ignore list."), false);
+                player.sendMessage(Text.of("Removed " + modInput + " from ignore list."), false);
             } else {
-                player.sendMessage(new LiteralText("[Error] " + modInput + " is not in ignore list.").setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
+                player.sendMessage(Text.of("[Error] " + modInput + " is not in ignore list."), false);
             }
         }
         return 1;

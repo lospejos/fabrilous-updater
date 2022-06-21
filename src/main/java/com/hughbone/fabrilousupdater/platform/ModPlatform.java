@@ -2,15 +2,11 @@ package com.hughbone.fabrilousupdater.platform;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hughbone.fabrilousupdater.util.FabUtil;
 import com.hughbone.fabrilousupdater.util.Hash;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +21,7 @@ public class ModPlatform {
 
     public void start(PlayerEntity player, String command) {
         if (isRunning) {
-            player.sendMessage(new LiteralText("[Error] Already checking for updates!").setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
+            player.sendMessage(Text.of("[Error] Already checking for updates!"), false);
         }
         isRunning = true;
 
@@ -50,7 +46,7 @@ public class ModPlatform {
                     continue;
                 }
 
-                player.sendMessage(new LiteralText("Checking " + fileName + ".."), true);
+                player.sendMessage(Text.of("Checking " + fileName + ".."), true);
 
 
                 if (fileName.contains(".jar")) {
@@ -86,7 +82,7 @@ public class ModPlatform {
                             }
                         }
                         if (currentMod.modName == null) {
-                            player.sendMessage(new LiteralText("[Error] '" + fileName + "' not found in Modrinth or CurseForge").setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
+                            player.sendMessage(Text.of("[Error] '" + fileName + "' not found in Modrinth or CurseForge"), false);
                         }
                         // Send update message
                         else if (newestFile != null) {
@@ -120,7 +116,7 @@ public class ModPlatform {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        player.sendMessage(new LiteralText("[Error] '" + fileName + "' not found in Modrinth or CurseForge").setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
+                        player.sendMessage(Text.of("[Error] '" + fileName + "' not found in Modrinth or CurseForge"), false);
                     }
                 }
             }
@@ -128,7 +124,7 @@ public class ModPlatform {
             e.printStackTrace();
         }
 
-        player.sendMessage(new LiteralText("Finished!"), true);
+        player.sendMessage(Text.of("Finished!"), true);
         isRunning = false;
     }
 
