@@ -25,7 +25,7 @@ public class Hash {
         long length = 0;
         char b;
         // get good bytes from file
-        for(int i = 0; i < flength; i++) {
+        for (int i = 0; i < flength; i++) {
             b = (char) byteFile[i];
 
             if (b == 0x9 || b == 0xa || b == 0xd || b == 0x20) {
@@ -36,7 +36,7 @@ public class Hash {
         }
         long h = (seed ^ length);
 
-        for(int i = 0; i < flength; i++) {
+        for (int i = 0; i < flength; i++) {
             b = (char) byteFile[i];
 
             if (b == 0x9 || b == 0xa || b == 0xd || b == 0x20) {

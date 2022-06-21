@@ -5,13 +5,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class ReleaseFile {
-    private String platform;
-    private JsonObject json;
-
     public String fileName;
     public String fileDate;
     public String downloadUrl;
     public boolean isFabric = false;
+    private String platform;
+    private JsonObject json;
 
     public ReleaseFile(JsonObject json, String platform) {
         if (platform.equals("curseforge")) {
@@ -29,9 +28,7 @@ public class ReleaseFile {
                 this.fileName = json.get("data").getAsJsonArray().get(0).getAsJsonObject().get("fileName").getAsString();
                 this.downloadUrl = json.get("data").getAsJsonArray().get(0).getAsJsonObject().get("downloadUrl").getAsString();
             }
-        }
-
-        else if (platform.equals("modrinth")) {
+        } else if (platform.equals("modrinth")) {
             this.platform = "MR";
             final JsonArray loadersArray = json.getAsJsonArray("loaders");
             for (JsonElement j : loadersArray) {
@@ -43,7 +40,7 @@ public class ReleaseFile {
             if (isFabric) {
                 this.fileDate = json.get("date_published").getAsString();
 
-                final JsonArray filesArray =  json.getAsJsonArray("files");
+                final JsonArray filesArray = json.getAsJsonArray("files");
                 for (JsonElement j : filesArray) {
                     String tempFile = j.getAsJsonObject().get("filename").getAsString();
                     if (!tempFile.contains("-sources") && !tempFile.contains("-dev")) {  // If multiple files uploaded, get rid of imposter ඞ ones
@@ -67,8 +64,7 @@ public class ReleaseFile {
         if (platform.equals("CF")) {
             //jsonVerArray = json.get("data").getAsJsonObject().getAsJsonArray("gameVersion");
             jsonVerArray = json.get("data").getAsJsonArray().get(0).getAsJsonObject().get("gameVersions").getAsJsonArray();
-        }
-        else if (platform.equals("MR")) {
+        } else if (platform.equals("MR")) {
             jsonVerArray = json.getAsJsonArray("game_versions");
         }
 

@@ -23,7 +23,8 @@ public class FabrilousUpdater implements ModInitializer {
 
         // Check if the client sees this mod on a server
         Identifier identifier = new Identifier("fabrilous_updater");
-        ServerPlayNetworking.registerGlobalReceiver(identifier, (server, player, handler, buf, responseSender) -> { });
+        ServerPlayNetworking.registerGlobalReceiver(identifier, (server, player, handler, buf, responseSender) -> {
+        });
 
         try {
             ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
@@ -32,6 +33,7 @@ public class FabrilousUpdater implements ModInitializer {
                     FabUtil.modPresentOnServer = ClientPlayNetworking.canSend(identifier);
                 }
             });
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 }

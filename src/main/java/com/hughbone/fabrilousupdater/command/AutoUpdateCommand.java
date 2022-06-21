@@ -17,8 +17,7 @@ public class AutoUpdateCommand {
     public void register(String env) {
         if (env.equals("CLIENT")) {
             registerClient();
-        }
-        else {
+        } else {
             registerServer();
         }
     }
@@ -75,8 +74,7 @@ public class AutoUpdateCommand {
         public void run() {
             if (ModPlatform.isRunning) {
                 player.sendMessage(new LiteralText("[Error] Already checking for updates!").setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
-            }
-            else {
+            } else {
                 player.sendMessage(Text.of("[Fabrilous Updater] Automatically updating all mods..."), false);
                 new ModPlatform().start(player, "autoupdate");
                 player.sendMessage(new LiteralText("[FabrilousUpdater] Finished! Restart Minecraft to apply updates."), false);

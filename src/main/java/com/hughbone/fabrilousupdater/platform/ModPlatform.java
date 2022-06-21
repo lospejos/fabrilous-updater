@@ -2,7 +2,6 @@ package com.hughbone.fabrilousupdater.platform;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hughbone.fabrilousupdater.util.FabUtil;
 import com.hughbone.fabrilousupdater.util.Hash;
@@ -43,7 +42,8 @@ public class ModPlatform {
                             continue outer;
                         }
                     }
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
 
                 // Check for updates
                 if (fileName.contains(".disabled")) {
@@ -77,7 +77,7 @@ public class ModPlatform {
                                 if (currentMod.modName != null) {
                                     // Get entire json list of release info
                                     String json = FabUtil.getJsonObject("https://api.curseforge.com/v1/mods/" + currentMod.projectID + "/files").toString();
-                                    json = "["+json+"]";
+                                    json = "[" + json + "]";
                                     JsonElement tradeElement = JsonParser.parseString(json);
                                     JsonArray trade = tradeElement.getAsJsonArray();
 
@@ -96,8 +96,7 @@ public class ModPlatform {
                                         currentMod.websiteUrl + "\"}," + "\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[{\"text\":\"Website\",\"italic\":true}]}},{" + "\"text\":\"has an \"},{\"text\":\"update.\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"" +
                                         newestFile.downloadUrl + "\"}," + "\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[{\"text\":\"Direct Download\",\"italic\":true}]}}]");
                                 player.sendMessage(updateMessage, false);
-                            }
-                            else if (command.equals("autoupdate")) {
+                            } else if (command.equals("autoupdate")) {
                                 try {
                                     Files.delete(modFile);
                                     String newFileName = newestFile.fileName;

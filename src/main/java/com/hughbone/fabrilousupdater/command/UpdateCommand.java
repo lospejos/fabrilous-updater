@@ -1,7 +1,6 @@
 package com.hughbone.fabrilousupdater.command;
 
 import com.hughbone.fabrilousupdater.platform.ModPlatform;
-
 import com.hughbone.fabrilousupdater.util.FabUtil;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
@@ -54,8 +53,7 @@ public class UpdateCommand {
         public void run() {
             if (ModPlatform.isRunning) {
                 player.sendMessage(new LiteralText("[Error] Already checking for updates!").setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
-            }
-            else {
+            } else {
                 player.sendMessage(new LiteralText("[FabrilousUpdater] Searching for updates. This may take a while..."), false);
                 new ModPlatform().start(player, "update");
                 player.sendMessage(new LiteralText("[FabrilousUpdater] Finished!"), false);

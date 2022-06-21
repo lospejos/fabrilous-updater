@@ -1,6 +1,7 @@
 package com.hughbone.fabrilousupdater.command;
 
-import com.hughbone.fabrilousupdater.command.suggestion.*;
+import com.hughbone.fabrilousupdater.command.suggestion.IgnoreList;
+import com.hughbone.fabrilousupdater.command.suggestion.ModList;
 import com.hughbone.fabrilousupdater.util.FabUtil;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -74,8 +75,7 @@ public class IgnoreCommand {
                 }
                 if (modExists) {
                     goodLines.add(line);
-                }
-                else {
+                } else {
                     modDeleted = true;
                 }
             }
