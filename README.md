@@ -1,4 +1,5 @@
-## Latest Release for [1.18.2](https://github.com/mllightitup/fabrilous-updater/releases/tag/fu3.0+1.18.2)
+## _**Works at 22.06.2022**_
+## Latest Release for [1.18.2](https://github.com/mllightitup/fabrilous-updater/releases/tag/fu3.0+1.18.2) 
 ## Latest Release for [1.19](https://github.com/mllightitup/fabrilous-updater/releases/tag/fu3.0+1.19)
 
 # Fabrilous Updater
