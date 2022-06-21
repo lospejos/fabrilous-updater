@@ -35,7 +35,6 @@ public class IgnoreCommand {
     private void registerClient() {
 
 
-
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(LiteralArgumentBuilder.<FabricClientCommandSource>literal("fabdate")
                     .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("ignore")
@@ -79,8 +78,7 @@ public class IgnoreCommand {
                 }
                 if (modExists) {
                     goodLines.add(line);
-                }
-                else {
+                } else {
                     modDeleted = true;
                 }
             }

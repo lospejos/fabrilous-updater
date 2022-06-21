@@ -28,7 +28,8 @@ public class ModList {
                                 continue outer;
                             }
                         }
-                    } catch (IOException ignored) {}
+                    } catch (IOException ignored) {
+                    }
 
                     builder.suggest(modFileName);
                 }

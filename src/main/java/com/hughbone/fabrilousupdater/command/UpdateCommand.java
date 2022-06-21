@@ -55,8 +55,7 @@ public class UpdateCommand {
         public void run() {
             if (ModPlatform.isRunning) {
                 player.sendMessage(Text.of("[Error] Already checking for updates!"), false);
-            }
-            else {
+            } else {
                 player.sendMessage(Text.of("[FabrilousUpdater] Searching for updates. This may take a while..."), false);
                 new ModPlatform().start(player, "update");
                 player.sendMessage(Text.of("[FabrilousUpdater] Finished!"), false);

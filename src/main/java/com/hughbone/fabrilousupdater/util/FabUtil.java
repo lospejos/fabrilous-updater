@@ -28,9 +28,7 @@ public class FabUtil {
     public static Path modsDir = FabricLoader.getInstance().getGameDir().resolve("mods");
 
     public static String sendPost(String murmurHash) throws Exception {
-        //String body = "[" + murmurHash + "]";
-        //String body = "[" + murmurHash + "]";
-        String body = "{ 'fingerprints': ["+ murmurHash +"] }";
+        String body = "{ 'fingerprints': [" + murmurHash + "] }";
         HttpURLConnection urlConn;
         URL mUrl = new URL("https://api.curseforge.com/v1/fingerprints");
         urlConn = (HttpURLConnection) mUrl.openConnection();
@@ -117,7 +115,8 @@ public class FabUtil {
         String[] versionStrSplit = versionStr.split("\\.");
         try {
             versionStrSplit = ArrayUtils.remove(versionStrSplit, 2);
-        } catch (IndexOutOfBoundsException ignored) {}
+        } catch (IndexOutOfBoundsException ignored) {
+        }
         versionStr = versionStrSplit[0] + "." + versionStrSplit[1];
         return versionStr;
     }
@@ -126,6 +125,7 @@ public class FabUtil {
         try {
             if (!Files.exists(updaterIgnorePath))
                 Files.createFile(updaterIgnorePath);
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 }

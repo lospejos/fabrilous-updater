@@ -22,16 +22,13 @@ public class CurrentMod {
                 fileDate = json.get("data").getAsJsonObject().get("exactMatches").getAsJsonArray().get(0).getAsJsonObject().get("file").getAsJsonObject().get("fileDate").getAsString();
                 fileName = json.get("data").getAsJsonObject().get("exactMatches").getAsJsonArray().get(0).getAsJsonObject().get("file").getAsJsonObject().get("fileName").getAsString();
                 json = FabUtil.getJsonObject("https://api.curseforge.com/v1/mods/" + projectID);
-                System.out.print(fileName);
                 modName = json.get("data").getAsJsonObject().get("name").getAsString();
                 websiteUrl = json.get("data").getAsJsonObject().get("links").getAsJsonObject().get("websiteUrl").getAsString() + "/files";
-            }
-
-            else if (platform.equals("modrinth")) {
+            } else if (platform.equals("modrinth")) {
                 JsonObject json = FabUtil.getJsonObject("https://api.modrinth.com/v2/version_file/" + hashOrResult + "?algorithm=sha1");
                 projectID = json.get("project_id").getAsString();
                 fileDate = json.get("date_published").getAsString();
-                final JsonArray filesArray =  json.getAsJsonArray("files");
+                final JsonArray filesArray = json.getAsJsonArray("files");
 
                 // Get filename
                 for (JsonElement j : filesArray) {
@@ -51,7 +48,7 @@ public class CurrentMod {
             modName = modName.replace("(fabric)", "");
             modName = modName.replace("(Fabric)", "");
             // Remove spaces at the end of the string
-            while (Character.toString(modName.charAt(modName.length()-1)).equals(" ")) {
+            while (Character.toString(modName.charAt(modName.length() - 1)).equals(" ")) {
                 modName = modName.substring(0, modName.length() - 1);
             }
         } catch (Exception e) {
