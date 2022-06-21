@@ -28,15 +28,17 @@ public class FabUtil {
     public static Path modsDir = FabricLoader.getInstance().getGameDir().resolve("mods");
 
     public static String sendPost(String murmurHash) throws Exception {
-        String body = "[" + murmurHash + "]";
-
+        //String body = "[" + murmurHash + "]";
+        //String body = "[" + murmurHash + "]";
+        String body = "{ 'fingerprints': ["+ murmurHash +"] }";
         HttpURLConnection urlConn;
-        URL mUrl = new URL("https://addons-ecs.forgesvc.net/api/v2/fingerprint");
+        URL mUrl = new URL("https://api.curseforge.com/v1/fingerprints");
         urlConn = (HttpURLConnection) mUrl.openConnection();
         urlConn.setDoOutput(true);
         urlConn.addRequestProperty("Accept", "application/json");
         urlConn.addRequestProperty("Content-Type", "application/json");
         urlConn.addRequestProperty("Content-Type", "application/json");
+        urlConn.addRequestProperty("x-api-key", "$2a$10$6qG/T.CNpNk12ZzxOZCwJu4/OQtEfc6e83kPHO4Qrw0AtJIf7u04q");
         urlConn.getOutputStream().write(body.getBytes(StandardCharsets.UTF_8));
 
         StringBuilder content;
@@ -80,6 +82,9 @@ public class FabUtil {
         try {
             URL obj = new URL(sURL);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.addRequestProperty("Accept", "application/json");
+            con.addRequestProperty("Content-Type", "application/json");
+            con.addRequestProperty("x-api-key", "$2a$10$6qG/T.CNpNk12ZzxOZCwJu4/OQtEfc6e83kPHO4Qrw0AtJIf7u04q");
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
             StringBuilder response = new StringBuilder();
