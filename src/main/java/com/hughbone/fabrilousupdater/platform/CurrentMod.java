@@ -18,18 +18,18 @@ public class CurrentMod {
             if (platform.equals("curseforge")) {
                 JsonObject json = JsonParser.parseString(hashOrResult).getAsJsonObject();
 
-                projectID = json.get("exactMatches").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
-                fileDate = json.get("exactMatches").getAsJsonArray().get(0).getAsJsonObject().get("file").getAsJsonObject().get("fileDate").getAsString();
-                fileName = json.get("exactMatches").getAsJsonArray().get(0).getAsJsonObject().get("file").getAsJsonObject().get("fileName").getAsString();
-
-                json = FabUtil.getJsonObject("https://addons-ecs.forgesvc.net/api/v2/addon/" + projectID);
-                modName = json.get("name").getAsString();
-                websiteUrl = json.get("websiteUrl").getAsString() + "/files";
+                projectID = json.get("data").getAsJsonObject().get("exactMatches").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
+                fileDate = json.get("data").getAsJsonObject().get("exactMatches").getAsJsonArray().get(0).getAsJsonObject().get("file").getAsJsonObject().get("fileDate").getAsString();
+                fileName = json.get("data").getAsJsonObject().get("exactMatches").getAsJsonArray().get(0).getAsJsonObject().get("file").getAsJsonObject().get("fileName").getAsString();
+                json = FabUtil.getJsonObject("https://api.curseforge.com/v1/mods/" + projectID);
+                System.out.print(fileName);
+                modName = json.get("data").getAsJsonObject().get("name").getAsString();
+                websiteUrl = json.get("data").getAsJsonObject().get("links").getAsJsonObject().get("websiteUrl").getAsString() + "/files";
             }
 
             else if (platform.equals("modrinth")) {
-                JsonObject json = FabUtil.getJsonObject("https://api.modrinth.com/api/v1/version_file/" + hashOrResult + "?algorithm=sha1");
-                projectID = json.get("mod_id").getAsString();
+                JsonObject json = FabUtil.getJsonObject("https://api.modrinth.com/v2/version_file/" + hashOrResult + "?algorithm=sha1");
+                projectID = json.get("project_id").getAsString();
                 fileDate = json.get("date_published").getAsString();
                 final JsonArray filesArray =  json.getAsJsonArray("files");
 
@@ -41,7 +41,7 @@ public class CurrentMod {
                         break;
                     }
                 }
-                json = FabUtil.getJsonObject("https://api.modrinth.com/api/v1/mod/" + projectID);
+                json = FabUtil.getJsonObject("https://api.modrinth.com/v2/project/" + projectID);
                 modName = json.get("title").getAsString();
                 websiteUrl = "https://www.modrinth.com/mod/" + json.get("slug").getAsString() + "/versions";
             }

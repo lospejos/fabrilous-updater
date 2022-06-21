@@ -1,6 +1,9 @@
 package com.hughbone.fabrilousupdater.platform;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.hughbone.fabrilousupdater.util.FabUtil;
 import com.hughbone.fabrilousupdater.util.Hash;
 import net.minecraft.entity.player.PlayerEntity;
@@ -59,7 +62,7 @@ public class ModPlatform {
 
                         if (currentMod.modName != null) {
                             // Get entire json list of release info
-                            JsonArray json = FabUtil.getJsonArray("https://api.modrinth.com/api/v1/mod/" + currentMod.projectID + "/version");
+                            JsonArray json = FabUtil.getJsonArray("https://api.modrinth.com/v2/project/" + currentMod.projectID + "/version");
                             newestFile = FabUtil.getNewUpdate(json, currentMod, "modrinth");
                         }
                         // Check if CurseForge mod
@@ -70,10 +73,15 @@ public class ModPlatform {
                             if (postResult != null) {
                                 // Get project ID
                                 currentMod = new CurrentMod(postResult, "curseforge");
+                                System.out.print(currentMod.modName);
                                 if (currentMod.modName != null) {
                                     // Get entire json list of release info
-                                    JsonArray json = FabUtil.getJsonArray("https://addons-ecs.forgesvc.net/api/v2/addon/" + currentMod.projectID + "/files");
-                                    newestFile = FabUtil.getNewUpdate(json, currentMod, "curseforge");
+                                    String json = FabUtil.getJsonObject("https://api.curseforge.com/v1/mods/" + currentMod.projectID + "/files").toString();
+                                    json = "["+json+"]";
+                                    JsonElement tradeElement = JsonParser.parseString(json);
+                                    JsonArray trade = tradeElement.getAsJsonArray();
+
+                                    newestFile = FabUtil.getNewUpdate(trade, currentMod, "curseforge");
                                 }
                             }
                         }
@@ -111,6 +119,7 @@ public class ModPlatform {
                             }
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
                         player.sendMessage(new LiteralText("[Error] '" + fileName + "' not found in Modrinth or CurseForge").setStyle(Style.EMPTY.withColor(Formatting.RED)), false);
                     }
                 }

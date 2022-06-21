@@ -16,18 +16,18 @@ public class ReleaseFile {
     public ReleaseFile(JsonObject json, String platform) {
         if (platform.equals("curseforge")) {
             this.platform = "CF";
-            final JsonArray modulesArray = json.getAsJsonArray("modules");
+            final JsonArray modulesArray = json.get("data").getAsJsonArray().get(0).getAsJsonObject().get("modules").getAsJsonArray();
             for (JsonElement j : modulesArray) {
-                if (j.getAsJsonObject().get("foldername").getAsString().equals("fabric.mod.json")) {
+                if (j.getAsJsonObject().get("name").getAsString().equals("fabric.mod.json")) {
                     isFabric = true;
                     break;
                 }
             }
 
             if (isFabric) {
-                this.fileDate = json.get("fileDate").getAsString();
-                this.fileName = json.get("fileName").getAsString();
-                this.downloadUrl = json.get("downloadUrl").getAsString();
+                this.fileDate = json.get("data").getAsJsonArray().get(0).getAsJsonObject().get("fileDate").getAsString();
+                this.fileName = json.get("data").getAsJsonArray().get(0).getAsJsonObject().get("fileName").getAsString();
+                this.downloadUrl = json.get("data").getAsJsonArray().get(0).getAsJsonObject().get("downloadUrl").getAsString();
             }
         }
 
@@ -65,7 +65,8 @@ public class ReleaseFile {
         JsonArray jsonVerArray = null;
 
         if (platform.equals("CF")) {
-            jsonVerArray = json.getAsJsonArray("gameVersion");
+            //jsonVerArray = json.get("data").getAsJsonObject().getAsJsonArray("gameVersion");
+            jsonVerArray = json.get("data").getAsJsonArray().get(0).getAsJsonObject().get("gameVersions").getAsJsonArray();
         }
         else if (platform.equals("MR")) {
             jsonVerArray = json.getAsJsonArray("game_versions");
