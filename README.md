@@ -1,7 +1,7 @@
 ## _**Works at 22.06.2022**_
 ## Latest Release for [1.18.2](https://github.com/mllightitup/fabrilous-updater/releases/tag/fu3.0+1.18.2) 
 ## Latest Release for [1.19](https://github.com/mllightitup/fabrilous-updater/releases/tag/fu3.0+1.19) 
-**Note:** _In singleplayer you need to OPEN TO LAN your world to access the "/fabupdate" command_
+**Note:** _In singleplayer you need to OPEN TO LAN your world to access the "/fabdate" command_
 
 # Fabrilous Updater
 Minecraft server-side (works in singleplayer!) mod used to check for updates to your Fabric mods.
