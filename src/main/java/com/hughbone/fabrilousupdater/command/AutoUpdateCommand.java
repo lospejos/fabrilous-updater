@@ -10,6 +10,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 
+import java.util.Objects;
+
 public class AutoUpdateCommand {
     public void register(String env) {
         if (env.equals("CLIENT")) {
@@ -54,7 +56,7 @@ public class AutoUpdateCommand {
     private void registerServer() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(CommandManager.literal("fabdateserver").requires(source -> source.hasPermissionLevel(4))
                 .then(CommandManager.literal("autoupdate").executes(ctx -> {
-                    ctx.getSource().getPlayer().sendMessage(getWarningMessage("Server"), false);
+                    Objects.requireNonNull(ctx.getSource().getPlayer()).sendMessage(getWarningMessage("Server"), false);
                     return 1;
                 }))
         ));
